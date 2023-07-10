@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "nested support",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup --config"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/will-wyx/dagre-plus/issues"
   },
-  "homepage": "https://github.com/will-wyx/dagre-plus#readme"
+  "homepage": "https://github.com/will-wyx/dagre-plus#readme",
+  "devDependencies": {
+    "rollup": "^3.26.2"
+  }
 }
