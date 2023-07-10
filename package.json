@@ -1,0 +1,22 @@
+{
+  "name": "dagre-plus",
+  "version": "1.0.0",
+  "description": "nested support",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/will-wyx/dagre-plus.git"
+  },
+  "keywords": [
+    "dagre"
+  ],
+  "author": "wyx",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/will-wyx/dagre-plus/issues"
+  },
+  "homepage": "https://github.com/will-wyx/dagre-plus#readme"
+}
