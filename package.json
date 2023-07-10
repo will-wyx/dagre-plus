@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "nested support",
   "main": "index.js",
+  "module": "dist/dagre-plus.es.js",
   "type": "module",
   "scripts": {
-    "build": "rollup --config"
+    "build": "rollup --config",
+    "demo": "cd demo && npm run dev"
   },
   "repository": {
     "type": "git",
