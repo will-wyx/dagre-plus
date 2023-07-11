@@ -3,7 +3,7 @@
  * @param graphData
  * @return {{}}
  */
-function parse(graphData) {
+export function parse(graphData) {
     const {nodes, edges} = graphData;
 
     const edgeSet = new Set(edges);
@@ -27,11 +27,11 @@ function parseNodesToTree(rootNodes, nodeMap, edgeSet) {
             children.forEach(childNodeId => {
                 const childNode = nodeMap.get(childNodeId);
                 nodeMap.delete(childNodeId);
-                childNodes.push(childNode);
+                childNodes.push(childNode)
             });
             node.part = parseNodesToTree(childNodes, nodeMap, edgeSet);
         }
-    });
+    })
     return rootPart;
 }
 
@@ -57,14 +57,6 @@ function convertNodesToMap(nodes) {
 
     nodes.forEach(node => {
         nodeMap.set(node.id, node);
-    });
+    })
     return nodeMap;
 }
-
-function layout(parsedGraph) {
-    const layoutData = {};
-    return layoutData;
-}
-
-export { layout, parse };
-//# sourceMappingURL=dagre-plus.es.js.map
