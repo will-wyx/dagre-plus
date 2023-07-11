@@ -4,7 +4,13 @@
  * @return {{}}
  */
 export function parse(graphData) {
-    const {nodes, edges} = graphData;
+    if (!graphData) {
+        throw new Error('参数不合法')
+    }
+
+    let {nodes, edges} = graphData ?? {};
+    nodes = nodes ?? []
+    edges = edges ?? []
 
     const edgeSet = new Set(edges);
     const nodeMap = convertNodesToMap(nodes);
