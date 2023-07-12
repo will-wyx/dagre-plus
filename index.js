@@ -1,6 +1,3 @@
 export {parse} from './src/parser'
+export {layout} from './src/layouter'
 
-export function layout(parsedGraph) {
-    const layoutData = {};
-    return layoutData;
-}
