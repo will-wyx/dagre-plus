@@ -260,19 +260,19 @@ describe('布局函数测试', () => {
                 "id": "A1",
                 "width": 140,
                 "height": 50,
-                "x": 70,
-                "y": 25,
+                "x": 185,
+                "y": 50,
                 "parent": "A",
                 "children": ["A11", "A12"]
-            }, {"id": "A11", "width": 50, "height": 50, "x": 25, "y": 25, "parent": "A1", "children": []}, {
+            }, {"id": "A11", "width": 50, "height": 50, "x": 210, "y": 75, "parent": "A1", "children": []}, {
                 "id": "A12",
                 "width": 50,
                 "height": 50,
-                "x": 115,
-                "y": 25,
+                "x": 300,
+                "y": 75,
                 "parent": "A1",
                 "children": []
-            }, {"id": "A2", "width": 50, "height": 50, "x": 205, "y": 25, "parent": "A", "children": []}, {
+            }, {"id": "A2", "width": 50, "height": 50, "x": 320, "y": 50, "parent": "A", "children": []}, {
                 "id": "B",
                 "width": 230,
                 "height": 50,
@@ -280,20 +280,20 @@ describe('布局函数测试', () => {
                 "y": 25,
                 parent: undefined,
                 "children": ["B1", "B2"]
-            }, {"id": "B1", "width": 50, "height": 50, "x": 25, "y": 25, "parent": "B", "children": []}, {
+            }, {"id": "B1", "width": 50, "height": 50, "x": 410, "y": 50, "parent": "B", "children": []}, {
                 "id": "B2",
                 "width": 140,
                 "height": 50,
-                "x": 160,
-                "y": 25,
+                "x": 545,
+                "y": 50,
                 "parent": "B",
                 "children": ["B21", "B22"]
-            }, {"id": "B21", "width": 50, "height": 50, "x": 25, "y": 25, "parent": "B2", "children": []}, {
+            }, {"id": "B21", "width": 50, "height": 50, "x": 570, "y": 75, "parent": "B2", "children": []}, {
                 "id": "B22",
                 "width": 50,
                 "height": 50,
-                "x": 115,
-                "y": 25,
+                "x": 660,
+                "y": 75,
                 "parent": "B2",
                 "children": []
             }],

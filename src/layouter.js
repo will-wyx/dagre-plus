@@ -88,20 +88,24 @@ function updateLayoutAttributes({nodes, edges}, g) {
 /**
  * 将嵌套的数据做扁平化处理，并且计算节点的绝对位置
  * @param nestedGraph
+ * @param offset
  * @return {{nodes: *[], edges: *[]}}
  */
-function flattenNestedGraphAndConvertPosition(nestedGraph) {
+function flattenNestedGraphAndConvertPosition(nestedGraph, offset) {
     const flatGraph = {nodes: [], edges: []};
     const {nodes, edges} = nestedGraph;
+    offset = offset ?? {x: 0, y: 0};
     nodes.forEach(node => {
+        // 转换坐标
+        const x = node.x + offset.x, y = node.y + offset.y;
         flatGraph.nodes.push({
             id: node.id,
             width: node.width, height: node.height,
-            x: node.x, y: node.y,
+            x, y,
             parent: node.parent, children: node.children
         });
         if (node.part) {
-            const partNestedGraph = flattenNestedGraphAndConvertPosition(node.part);
+            const partNestedGraph = flattenNestedGraphAndConvertPosition(node.part, {x, y});
             flatGraph.nodes.push(...partNestedGraph.nodes);
             flatGraph.edges.push(...partNestedGraph.edges);
         }
