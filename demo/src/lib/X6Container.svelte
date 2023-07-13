@@ -29,10 +29,10 @@
 
     onMount(() => {
         const nodes = layoutData.nodes.map(node => {
-            const {id, label, width, height} = node;
+            const {id, label, width, height, parent, children} = node;
             const x = node.x - width / 2;
             const y = node.y - height / 2;
-            return {id, label, x, y, width, height};
+            return {id, label, x, y, width, height, parent, children};
         });
 
         const edges = layoutData.edges.map(edge => {
