@@ -99,7 +99,7 @@ function layout(nestedGraph, config) {
     updateLayoutAttributes(nestedGraph, g);
 
     const graph = g.graph();
-    nestedGraph.graph = {width: graph.width, height: graph.height};
+    nestedGraph.graph = {width: graph.width + config.spacing, height: graph.height + config.spacing};
     return nestedGraph;
 }
 
@@ -111,7 +111,7 @@ function layout(nestedGraph, config) {
  */
 function layoutAndFlattenNestedGraph(nestedGraph, config) {
     layout(nestedGraph, config);
-    return flattenNestedGraphAndConvertPosition(nestedGraph);
+    return flattenNestedGraphAndConvertPosition(nestedGraph, config);
 }
 
 /**
@@ -160,7 +160,7 @@ function updateLayoutAttributes({nodes, edges}, g) {
  * @param offset
  * @return {{nodes: *[], edges: *[]}}
  */
-function flattenNestedGraphAndConvertPosition(nestedGraph, offset) {
+function flattenNestedGraphAndConvertPosition(nestedGraph, config, offset) {
     const flatGraph = {nodes: [], edges: []};
     const {nodes, edges} = nestedGraph;
     offset = offset ?? {x: 0, y: 0};
@@ -176,10 +176,10 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, offset) {
         });
         if (node.part) {
             const parentOffset = {
-                x: x - width / 2,
-                y: y - height / 2
+                x: x - width / 2 + config.spacing / 2,
+                y: y - height / 2 + config.spacing / 2
             };
-            const partNestedGraph = flattenNestedGraphAndConvertPosition(node.part, parentOffset);
+            const partNestedGraph = flattenNestedGraphAndConvertPosition(node.part, config, parentOffset);
             flatGraph.nodes.push(...partNestedGraph.nodes);
             flatGraph.edges.push(...partNestedGraph.edges);
         }
