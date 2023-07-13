@@ -14,6 +14,7 @@
     "vite": "^4.4.0"
   },
   "dependencies": {
+    "@antv/x6": "^2.11.5",
     "dagre-plus": "file:../"
   }
 }

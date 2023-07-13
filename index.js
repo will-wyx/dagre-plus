@@ -1,3 +1,3 @@
 export {parse} from './src/parser'
-export {layout} from './src/layouter'
+export {layout, layoutAndFlattenNestedGraph} from './src/layouter'
 

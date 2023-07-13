@@ -98,6 +98,7 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, offset) {
     nodes.forEach(node => {
         // 转换坐标
         const x = node.x + offset.x, y = node.y + offset.y;
+        const width = node.width, height = node.height;
         flatGraph.nodes.push({
             id: node.id,
             width: node.width, height: node.height,
@@ -105,12 +106,25 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, offset) {
             parent: node.parent, children: node.children
         });
         if (node.part) {
-            const partNestedGraph = flattenNestedGraphAndConvertPosition(node.part, {x, y});
+            const parentOffset = {
+                x: x - width / 2,
+                y: y - height / 2
+            }
+            const partNestedGraph = flattenNestedGraphAndConvertPosition(node.part, parentOffset);
             flatGraph.nodes.push(...partNestedGraph.nodes);
             flatGraph.edges.push(...partNestedGraph.edges);
         }
     });
-    flatGraph.edges.push(...edges);
+
+    edges.forEach(edge => {
+        if (edge.points) {
+            edge.points.forEach(point => {
+                point.x += offset.x;
+                point.y += offset.y;
+            })
+        }
+        flatGraph.edges.push(edge);
+    });
     return flatGraph;
 }
 
