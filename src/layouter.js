@@ -11,7 +11,7 @@ export function layout(nestedGraph, config) {
         throw new Error('参数不合法');
     }
 
-    let {nodes, edges} = nestedGraph;
+    const {nodes, edges} = nestedGraph;
 
     // 需要递归对子元素进行布局算法的调用，为了计算 width、height
     // 遍历 nodes 递归 layout
@@ -22,6 +22,36 @@ export function layout(nestedGraph, config) {
     })
 
     const g = initGraph(config);
+
+    addElementsToGraph(nestedGraph, g);
+
+    dagre.layout(g);
+
+    updateLayoutAttributes(nestedGraph, g);
+
+    const graph = g.graph();
+    nestedGraph.graph = {width: graph.width, height: graph.height};
+    return nestedGraph;
+}
+
+/**
+ * 布局并返回扁平化数据
+ * @param nestedGraph
+ * @param config
+ * @return {{nodes: *[], edges: *[]}}
+ */
+export function layoutAndFlattenNestedGraph(nestedGraph, config) {
+    layout(nestedGraph, config);
+    return flattenNestedGraphAndConvertPosition(nestedGraph);
+}
+
+/**
+ * 将节点和边加入到用于布局的图上
+ * @param nodes
+ * @param edges
+ * @param g
+ */
+function addElementsToGraph({nodes, edges}, g) {
     nodes.forEach(node => {
         let width = node.width || 50, height = node.height || 50;
         if (node.part && node.part.graph) {
@@ -34,27 +64,50 @@ export function layout(nestedGraph, config) {
     edges.forEach(edge => {
         g.setEdge(edge.source, edge.target);
     });
-
-    dagre.layout(g);
-
-    nodes.forEach(node => {
-        bindNodeLayoutProperties(node, g.node(node.id));
-    })
-
-    const graph = g.graph();
-    nestedGraph.graph = {width: graph.width, height: graph.height};
-    return nestedGraph;
 }
 
 /**
- * 将计算完的布局属性更新到节点上
- * @param targetNode
- * @param layoutProperties
+ * 将计算完的布局属性更新到图数据上
+ * @param nodes
+ * @param edges
+ * @param g
  */
-function bindNodeLayoutProperties(targetNode, layoutProperties) {
-    for (let key of Object.keys(layoutProperties)) {
-        targetNode[key] = layoutProperties[key];
-    }
+function updateLayoutAttributes({nodes, edges}, g) {
+    // 将计算完的布局属性更新到节点上
+    nodes.forEach(node => {
+        Object.assign(node, g.node(node.id));
+    })
+
+    // 将计算完的布局属性更新到边上
+    edges.forEach(edge => {
+        const {source: v, target: w} = edge;
+        Object.assign(edge, g.edge({v, w}));
+    })
+}
+
+/**
+ * 将嵌套的数据做扁平化处理，并且计算节点的绝对位置
+ * @param nestedGraph
+ * @return {{nodes: *[], edges: *[]}}
+ */
+function flattenNestedGraphAndConvertPosition(nestedGraph) {
+    const flatGraph = {nodes: [], edges: []};
+    const {nodes, edges} = nestedGraph;
+    nodes.forEach(node => {
+        flatGraph.nodes.push({
+            id: node.id,
+            width: node.width, height: node.height,
+            x: node.x, y: node.y,
+            parent: node.parent, children: node.children
+        });
+        if (node.part) {
+            const partNestedGraph = flattenNestedGraphAndConvertPosition(node.part);
+            flatGraph.nodes.push(...partNestedGraph.nodes);
+            flatGraph.edges.push(...partNestedGraph.edges);
+        }
+    });
+    flatGraph.edges.push(...edges);
+    return flatGraph;
 }
 
 function initGraph(config) {
