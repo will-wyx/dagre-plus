@@ -170,6 +170,7 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, config, offset) {
         const width = node.width, height = node.height;
         flatGraph.nodes.push({
             id: node.id,
+            label: node.label,
             width: node.width, height: node.height,
             x, y,
             parent: node.parent, children: node.children
