@@ -21,8 +21,10 @@ const data = {
         {"id": "D", "label": "D"}
     ],
     edges: [
-        {source: 'A', target: 'B'},
         {source: 'A', target: 'C'},
+        {source: 'A', target: 'B'},
+        // {source: 'A', target: 'D'},
+        // {source: 'D', target: 'B'},
         {source: 'A1', target: 'A2'},
         {source: 'A1', target: 'A3'},
         {source: 'B1', target: 'B2'},
@@ -31,8 +33,33 @@ const data = {
         {source: 'B23', target: 'B22'},
         {source: 'C1', target: 'C2'},
         {source: 'C1', target: 'C3'},
-        {source: 'C', target: 'D'},
     ]
 }
 
-export default data
+const data1 = {
+    nodes: [
+        {"id": "A", "label": "A"},
+        {"id": "B", "label": "B", width: 100},
+        {"id": "C", "label": "C", height: 100},
+    ],
+    edges: [
+        {source: 'A', target: 'C'},
+        {source: 'A', target: 'B'},
+    ]
+}
+
+const data2 = {
+    nodes: [
+        {"id": "A", "label": "A"},
+        {"id": "B", "label": "B", width: 100},
+        {"id": "C", "label": "C", height: 100},
+        {"id": "D", "label": "D"},
+    ],
+    edges: [
+        {source: 'A', target: 'B'},
+        {source: 'A', target: 'D'},
+        {source: 'D', target: 'C'},
+    ]
+}
+
+export {data, data1, data2}
