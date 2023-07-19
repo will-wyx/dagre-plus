@@ -1,4 +1,4 @@
-import dagre from '@dagrejs/dagre';
+import dagre from 'dagre';
 
 /**
  * 图的扁平的数据结构转成布局需要的树型
@@ -173,6 +173,7 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, config, offset) {
             label: node.label,
             width: node.width, height: node.height,
             x, y,
+            rank: node.rank, order: node._order,
             parent: node.parent, children: node.children
         });
         if (node.part) {

@@ -1,4 +1,4 @@
-import dagre from '@dagrejs/dagre'
+import dagre from 'dagre'
 
 /**
  * 布局算法计算嵌套图的宽高和元素的相对位置，渲染图的时候需要计算各级节点的绝对位置
@@ -104,6 +104,7 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, config, offset) {
             label: node.label,
             width: node.width, height: node.height,
             x, y,
+            rank: node.rank, order: node._order,
             parent: node.parent, children: node.children
         });
         if (node.part) {

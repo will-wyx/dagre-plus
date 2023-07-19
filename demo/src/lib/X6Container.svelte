@@ -27,7 +27,9 @@
 
     onMount(() => {
         const layoutData = layout(data1)
+        const dimension = layoutData.nodes.length;
         const nodes = layoutData.nodes.map(node => {
+            console.log({id: node.id, rank: node.rank, order: node.order, sort: node.rank * dimension + node.order})
             const {id, label, width, height, parent, children} = node;
             const x = node.x - width / 2;
             const y = node.y - height / 2;
@@ -65,7 +67,7 @@
         });
 
         x6Graph.fromJSON({nodes, edges});
-        x6Graph.centerContent();
+        // x6Graph.centerContent();
     }
 </script>
 <div class="tool-bar">

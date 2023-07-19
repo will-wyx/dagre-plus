@@ -56,9 +56,9 @@ const data2 = {
         {"id": "D", "label": "D"},
     ],
     edges: [
+        {source: 'A', target: 'C'},
         {source: 'A', target: 'B'},
-        {source: 'A', target: 'D'},
-        {source: 'D', target: 'C'},
+        {source: 'C', target: 'D'},
     ]
 }
 
