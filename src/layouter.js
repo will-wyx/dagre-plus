@@ -1,6 +1,17 @@
 import dagre from 'dagre'
 
 /**
+ * 布局并返回扁平化数据
+ * @param nestedGraph
+ * @param config
+ * @return {{nodes: *[], edges: *[]}}
+ */
+export function layoutAndFlattenNestedGraph(nestedGraph, config) {
+    layout(nestedGraph, config);
+    return flattenNestedGraphAndConvertPosition(nestedGraph, config);
+}
+
+/**
  * 布局算法计算嵌套图的宽高和元素的相对位置，渲染图的时候需要计算各级节点的绝对位置
  * @param nestedGraph
  * @param config
@@ -34,15 +45,19 @@ export function layout(nestedGraph, config) {
     return nestedGraph;
 }
 
-/**
- * 布局并返回扁平化数据
- * @param nestedGraph
- * @param config
- * @return {{nodes: *[], edges: *[]}}
- */
-export function layoutAndFlattenNestedGraph(nestedGraph, config) {
-    layout(nestedGraph, config);
-    return flattenNestedGraphAndConvertPosition(nestedGraph, config);
+function initGraph(config) {
+    const g = new dagre.graphlib.Graph();
+
+    g.setGraph({
+        rankdir: config.direction,
+        nodesep: config.spacing,
+        edgesep: config.spacing,
+        ranksep: config.spacing,
+        acyclicer: config.acyclicer,
+        ranker: config.ranker,
+
+    }).setDefaultEdgeLabel(() => ({}));
+    return g;
 }
 
 /**
@@ -128,19 +143,4 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, config, offset) {
         flatGraph.edges.push(edge);
     });
     return flatGraph;
-}
-
-function initGraph(config) {
-    const g = new dagre.graphlib.Graph();
-
-    g.setGraph({
-        rankdir: config.direction,
-        nodesep: config.spacing,
-        edgesep: config.spacing,
-        ranksep: config.spacing,
-        acyclicer: config.acyclicer,
-        ranker: config.ranker,
-
-    }).setDefaultEdgeLabel(() => ({}));
-    return g;
 }

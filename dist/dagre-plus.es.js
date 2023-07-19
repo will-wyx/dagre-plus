@@ -23,6 +23,20 @@ function parse(graphData) {
     return parseNodesToTree(rootNodes, nodeMap, edgeSet);
 }
 
+/**
+ * 节点列表转成 map
+ * @param nodes
+ * @return {Map<any, any>}
+ */
+function convertNodesToMap(nodes) {
+    const nodeMap = new Map();
+
+    nodes.forEach(node => {
+        nodeMap.set(node.id, node);
+    });
+    return nodeMap;
+}
+
 function parseNodesToTree(rootNodes, nodeMap, edgeSet) {
     const rootPart = {nodes: [], edges: []};
     rootNodes.forEach(node => {
@@ -56,17 +70,14 @@ function filterEdgesFromEdgeSetByNodeId(edgeSet, nodeId) {
 }
 
 /**
- * 节点列表转成 map
- * @param nodes
- * @return {Map<any, any>}
+ * 布局并返回扁平化数据
+ * @param nestedGraph
+ * @param config
+ * @return {{nodes: *[], edges: *[]}}
  */
-function convertNodesToMap(nodes) {
-    const nodeMap = new Map();
-
-    nodes.forEach(node => {
-        nodeMap.set(node.id, node);
-    });
-    return nodeMap;
+function layoutAndFlattenNestedGraph(nestedGraph, config) {
+    layout(nestedGraph, config);
+    return flattenNestedGraphAndConvertPosition(nestedGraph, config);
 }
 
 /**
@@ -103,15 +114,19 @@ function layout(nestedGraph, config) {
     return nestedGraph;
 }
 
-/**
- * 布局并返回扁平化数据
- * @param nestedGraph
- * @param config
- * @return {{nodes: *[], edges: *[]}}
- */
-function layoutAndFlattenNestedGraph(nestedGraph, config) {
-    layout(nestedGraph, config);
-    return flattenNestedGraphAndConvertPosition(nestedGraph, config);
+function initGraph(config) {
+    const g = new dagre.graphlib.Graph();
+
+    g.setGraph({
+        rankdir: config.direction,
+        nodesep: config.spacing,
+        edgesep: config.spacing,
+        ranksep: config.spacing,
+        acyclicer: config.acyclicer,
+        ranker: config.ranker,
+
+    }).setDefaultEdgeLabel(() => ({}));
+    return g;
 }
 
 /**
@@ -197,21 +212,6 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, config, offset) {
         flatGraph.edges.push(edge);
     });
     return flatGraph;
-}
-
-function initGraph(config) {
-    const g = new dagre.graphlib.Graph();
-
-    g.setGraph({
-        rankdir: config.direction,
-        nodesep: config.spacing,
-        edgesep: config.spacing,
-        ranksep: config.spacing,
-        acyclicer: config.acyclicer,
-        ranker: config.ranker,
-
-    }).setDefaultEdgeLabel(() => ({}));
-    return g;
 }
 
 export { layout, layoutAndFlattenNestedGraph, parse };

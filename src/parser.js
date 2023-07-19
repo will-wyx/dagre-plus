@@ -21,6 +21,20 @@ export function parse(graphData) {
     return parseNodesToTree(rootNodes, nodeMap, edgeSet);
 }
 
+/**
+ * 节点列表转成 map
+ * @param nodes
+ * @return {Map<any, any>}
+ */
+function convertNodesToMap(nodes) {
+    const nodeMap = new Map();
+
+    nodes.forEach(node => {
+        nodeMap.set(node.id, node);
+    })
+    return nodeMap;
+}
+
 function parseNodesToTree(rootNodes, nodeMap, edgeSet) {
     const rootPart = {nodes: [], edges: []};
     rootNodes.forEach(node => {
@@ -51,18 +65,4 @@ function filterEdgesFromEdgeSetByNodeId(edgeSet, nodeId) {
         }
     }
     return result;
-}
-
-/**
- * 节点列表转成 map
- * @param nodes
- * @return {Map<any, any>}
- */
-function convertNodesToMap(nodes) {
-    const nodeMap = new Map();
-
-    nodes.forEach(node => {
-        nodeMap.set(node.id, node);
-    })
-    return nodeMap;
 }
