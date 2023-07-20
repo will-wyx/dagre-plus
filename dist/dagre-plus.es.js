@@ -91,6 +91,11 @@ function layout(nestedGraph, config) {
         throw new Error('参数不合法');
     }
 
+    // 先根据 config 里边的 prevGraph 给 nodes, edges 排序
+    if (config.prevGraph) {
+        sortGraphElementsByPrevGraph(nestedGraph, config.prevGraph);
+    }
+
     const {nodes, edges} = nestedGraph;
 
     // 需要递归对子元素进行布局算法的调用，为了计算 width、height
@@ -112,6 +117,49 @@ function layout(nestedGraph, config) {
     const graph = g.graph();
     nestedGraph.graph = {width: graph.width + config.spacing, height: graph.height + config.spacing};
     return nestedGraph;
+}
+
+function sortGraphElementsByPrevGraph(graph, prevGraph) {
+    const {nodes, edges} = graph;
+    const {nodes: prevNodes, edges: prevEdges} = prevGraph;
+
+    const nodeDimension = prevNodes.length;
+    prevEdges.length;
+
+    nodes.sort((a, b) => {
+        const prevNodeA = prevNodes.find(n => n.id === a.id);
+        const prevNodeB = prevNodes.find(n => n.id === b.id);
+
+        // 原图中没有节点，就给节点排到最后
+        if (!prevNodeA && !prevNodeB) {
+            return 0
+        } else if (!prevNodeA) {
+            return 1
+        } else if (!prevNodeB) {
+            return -1
+        }
+
+        const sortA = prevNodeA.rank * nodeDimension + prevNodeA.order;
+        const sortB = prevNodeB.rank * nodeDimension + prevNodeB.order;
+        return sortA - sortB;
+    });
+
+    // 排序 edges
+    edges.sort((a, b) => {
+        const prevEdgeA = prevEdges.findIndex(e => e.source === a.source && e.target === a.target);
+        const prevEdgeB = prevEdges.findIndex(e => e.source === b.source && e.target === b.target);
+
+        // 原图中没有，就排到最后
+        if (prevEdgeA === -1 && prevEdgeB === -1) {
+            return 0
+        } else if (prevEdgeA === -1) {
+            return 1
+        } else if (prevEdgeB === -1) {
+            return -1
+        }
+
+        return prevEdgeA - prevEdgeB;
+    });
 }
 
 function initGraph(config) {

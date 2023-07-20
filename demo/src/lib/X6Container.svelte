@@ -2,11 +2,12 @@
     import {onMount} from "svelte";
     import {Graph} from "@antv/x6";
     import {layoutAndFlattenNestedGraph, parse} from "dagre-plus"
-    import {data1, data2} from "../../data/graphData.js";
+    import {prevData, data, data1, data2} from "../../data/graphData.js";
 
-    function layout(graphData) {
+    const config = {direction: 'LR', spacing: 40, ranker: 'network-simplex'}
+
+    function layout(graphData, config) {
         const parsedGraph = parse(graphData)
-        const config = {direction: 'LR', spacing: 40, ranker: 'network-simplex'}
         return layoutAndFlattenNestedGraph(parsedGraph, config)
     }
 
@@ -26,10 +27,12 @@
     }
 
     onMount(() => {
-        const layoutData = layout(data1)
+        const prevGraph = layout(prevData, config)
+        console.log(prevGraph);
+        const layoutData = layout(data, {...config, prevGraph})
         const dimension = layoutData.nodes.length;
         const nodes = layoutData.nodes.map(node => {
-            console.log({id: node.id, rank: node.rank, order: node.order, sort: node.rank * dimension + node.order})
+            // console.log({id: node.id, rank: node.rank, order: node.order, sort: node.rank * dimension + node.order})
             const {id, label, width, height, parent, children} = node;
             const x = node.x - width / 2;
             const y = node.y - height / 2;
@@ -49,8 +52,9 @@
     let dataIdx = 0;
 
     function handleToggle() {
+        // todo 更新布局用 cell.translate(0, 0, {transition: true}) 设定位移动画
         const data = dataIdx++ % 2 === 0 ? data2 : data1;
-        const layoutData = layout(data)
+        const layoutData = layout(data, config)
 
         const nodes = layoutData.nodes.map(node => {
             const {id, label, width, height, parent, children} = node;
