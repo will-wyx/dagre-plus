@@ -20,6 +20,17 @@
             width: 1200,
             height: 800,
             background: {color: '#efefef'},
+            connecting: {
+                // router: {
+                //     name: 'er',
+                //     args: {
+                //         // offset: 'center',
+                //     },
+                // },
+                router: {
+                    name: 'normal',
+                },
+            }
         });
 
         x6Graph.fromJSON(data);
@@ -40,10 +51,18 @@
         });
 
         const edges = layoutData.edges.map(edge => {
-            const source = edge.points.shift();
-            const target = edge.points.pop();
-            const vertices = edge.points;
-            return {source, target, vertices};
+            // const source = edge.points.shift();
+            // const target = edge.points.pop();
+            // const vertices = edge.points;
+            // return {source, target, vertices};
+            const {source, target} = edge;
+            return {source, target};
+
+            // edge.points.shift();
+            // edge.points.pop();
+            // const {source, target} = edge;
+            // const vertices = edge.points;
+            // return {source, target, vertices};
         });
 
         createX6Graph({nodes, edges});
