@@ -2,9 +2,9 @@
     import {onMount} from "svelte";
     import {Graph} from "@antv/x6";
     import {layoutAndFlattenNestedGraph, parse} from "dagre-plus"
-    import {prevData, data, data1, data2} from "../../data/graphData.js";
+    import {prevData, data, data1, data2, data3} from "../../data/graphData.js";
 
-    const config = {direction: 'LR', spacing: 40, ranker: 'network-simplex'}
+    const config = {direction: 'LR', spacing: 40, containerHeader: 40, ranker: 'network-simplex'}
 
     function layout(graphData, config) {
         const parsedGraph = parse(graphData)
@@ -38,9 +38,9 @@
     }
 
     onMount(() => {
-        const prevGraph = layout(prevData, config)
-        console.log(prevGraph);
-        const layoutData = layout(data, {...config, prevGraph})
+        // const prevGraph = layout(prevData, config)
+        // console.log(prevGraph);
+        const layoutData = layout(data3, {...config})
         const dimension = layoutData.nodes.length;
         const nodes = layoutData.nodes.map(node => {
             // console.log({id: node.id, rank: node.rank, order: node.order, sort: node.rank * dimension + node.order})

@@ -7,6 +7,9 @@ import dagre from 'dagre'
  * @return {{nodes: *[], edges: *[]}}
  */
 export function layoutAndFlattenNestedGraph(nestedGraph, config) {
+    config.spacing = config.spacing || 40;
+    config.containerHeader = config.containerHeader || 0;
+
     layout(nestedGraph, config);
     return flattenNestedGraphAndConvertPosition(nestedGraph, config);
 }
@@ -46,7 +49,10 @@ export function layout(nestedGraph, config) {
     updateLayoutAttributes(nestedGraph, g);
 
     const graph = g.graph();
-    nestedGraph.graph = {width: graph.width + config.spacing, height: graph.height + config.spacing};
+    nestedGraph.graph = {
+        width: graph.width + config.spacing,
+        height: graph.height + config.spacing + config.containerHeader
+    };
     return nestedGraph;
 }
 
@@ -162,18 +168,29 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, config, offset) {
         // 转换坐标
         const x = node.x + offset.x, y = node.y + offset.y;
         const width = node.width, height = node.height;
-        flatGraph.nodes.push({
+
+        const tempNode = config.keepOriginalNode ? {
+            ...node,
             id: node.id,
             label: node.label,
             width: node.width, height: node.height,
             x, y,
             rank: node.rank, order: node._order,
             parent: node.parent, children: node.children
-        });
+        } : {
+            id: node.id,
+            label: node.label,
+            width: node.width, height: node.height,
+            x, y,
+            rank: node.rank, order: node._order,
+            parent: node.parent, children: node.children
+        }
+
+        flatGraph.nodes.push(tempNode);
         if (node.part) {
             const parentOffset = {
                 x: x - width / 2 + config.spacing / 2,
-                y: y - height / 2 + config.spacing / 2
+                y: y - height / 2 + config.spacing / 2 + config.containerHeader
             }
             const partNestedGraph = flattenNestedGraphAndConvertPosition(node.part, config, parentOffset);
             flatGraph.nodes.push(...partNestedGraph.nodes);
