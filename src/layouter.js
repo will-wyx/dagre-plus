@@ -104,9 +104,9 @@ function initGraph(config) {
 
     g.setGraph({
         rankdir: config.direction,
-        nodesep: config.spacing,
-        edgesep: config.spacing,
-        ranksep: config.spacing,
+        nodesep: config.nodesep ?? config.spacing,
+        edgesep: config.edgesep ?? config.spacing,
+        ranksep: config.ranksep ?? config.spacing,
         acyclicer: config.acyclicer,
         ranker: config.ranker,
 
