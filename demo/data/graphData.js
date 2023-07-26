@@ -15,7 +15,7 @@ const prevData = {
         {"id": "B21", "parent": "B2", "children": [], "label": "B21"},
         {"id": "B22", "parent": "B2", "children": [], "label": "B22"},
         {"id": "B23", "parent": "B2", "children": [], "label": "B23"},
-        {"id": "C", "children": ["C1", "C2", "C3"], "label": "C"},
+        {"id": "C", "children": ["C1", "C2", "C3"], "label": "C", "collapsed": true},
         {"id": "C1", "parent": "C", "width": 300, "height": 100, "label": "C1"},
         {"id": "C2", "parent": "C", "children": [], "label": "C2"},
         {"id": "C3", "parent": "C", "children": [], "label": "C3"},

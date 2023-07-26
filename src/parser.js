@@ -35,9 +35,13 @@ function convertNodesToMap(nodes) {
     return nodeMap;
 }
 
-function parseNodesToTree(rootNodes, nodeMap, edgeSet) {
+function parseNodesToTree(rootNodes, nodeMap, edgeSet, parent) {
     const rootPart = {nodes: [], edges: []};
     rootNodes.forEach(node => {
+        // parent 是折叠或隐藏状态，所有子节点节点隐藏
+        if (parent && (parent.collapsed || parent.hide)) {
+            node.hide = true;
+        }
         rootPart.nodes.push(node);
         rootPart.edges.push(...filterEdgesFromEdgeSetByNodeId(edgeSet, node.id));
 
@@ -49,7 +53,7 @@ function parseNodesToTree(rootNodes, nodeMap, edgeSet) {
                 nodeMap.delete(childNodeId);
                 childNodes.push(childNode)
             });
-            node.part = parseNodesToTree(childNodes, nodeMap, edgeSet);
+            node.part = parseNodesToTree(childNodes, nodeMap, edgeSet, node);
         }
     })
     return rootPart;

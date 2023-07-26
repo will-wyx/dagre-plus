@@ -40,7 +40,7 @@
     onMount(() => {
         // const prevGraph = layout(prevData, config)
         // console.log(prevGraph);
-        const layoutData = layout(data3, {...config})
+        const layoutData = layout(data, {...config})
         const dimension = layoutData.nodes.length;
         const nodes = layoutData.nodes.map(node => {
             // console.log({id: node.id, rank: node.rank, order: node.order, sort: node.rank * dimension + node.order})
