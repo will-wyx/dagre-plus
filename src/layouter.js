@@ -123,10 +123,18 @@ function initGraph(config) {
 function addElementsToGraph({nodes, edges}, g) {
     nodes.forEach(node => {
         let width = node.width || 50, height = node.height || 50;
-        if (node.part && node.part.graph) {
+        // 当节点是未折叠状态的容器
+        if (node.part && node.part.graph && !node.collapsed) {
             width = node.part.graph.width;
             height = node.part.graph.height;
         }
+
+        // 节点隐藏宽高设 0
+        if (node.hide) {
+            width = 0;
+            height = 0;
+        }
+
         g.setNode(node.id, {width, height});
     });
 
@@ -167,24 +175,20 @@ function flattenNestedGraphAndConvertPosition(nestedGraph, config, offset) {
     nodes.forEach(node => {
         // 转换坐标
         const x = node.x + offset.x, y = node.y + offset.y;
-        const width = node.width, height = node.height;
+        let width = node.width, height = node.height;
 
-        const tempNode = config.keepOriginalNode ? {
-            ...node,
+        const baseData = {
             id: node.id,
             label: node.label,
-            width: node.width, height: node.height,
+            width, height,
             x, y,
             rank: node.rank, order: node._order,
-            parent: node.parent, children: node.children
-        } : {
-            id: node.id,
-            label: node.label,
-            width: node.width, height: node.height,
-            x, y,
-            rank: node.rank, order: node._order,
-            parent: node.parent, children: node.children
+            parent: node.parent, children: node.children,
+            collapsed: node.collapsed, hide: node.hide
         }
+
+        let tempNode = config.keepOriginalNode ? {...node} : {}
+        tempNode = {...tempNode, ...baseData}
 
         flatGraph.nodes.push(tempNode);
         if (node.part) {
